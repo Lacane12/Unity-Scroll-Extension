@@ -9,21 +9,16 @@ using UnityEngine.SceneManagement;
 public class ScrollController : MonoBehaviour
 {
 
-    
+    public Scrollbar scrollbar;
+    public float ScrollStep;
 
     private bool isSliding = false;
-
-    public Scrollbar scrollbar;
-    
-
-    public float ScrollStep;
 
     private RectTransform contentRect;
     List<RectTransform> objectsRects = new List<RectTransform>();
 
-    private void ResetScroll() {
-
-
+    private void ResetScroll()
+    {
         contentRect = GetComponent<RectTransform>();
         contentRect.offsetMax = new Vector2(0f, contentRect.offsetMax.y);
         contentRect.offsetMin = new Vector2(0f, contentRect.offsetMin.y);
@@ -38,8 +33,9 @@ public class ScrollController : MonoBehaviour
         if (contentRect != null)
             contentRect.offsetMax = new Vector2(0, contentRect.offsetMax.y);
 
-        foreach (RectTransform go in objectsRects) { 
-            if(go != null)
+        foreach (RectTransform go in objectsRects)
+        {
+            if (go != null)
             {
                 go.anchoredPosition = new Vector2(400, go.anchoredPosition.y);
             }
@@ -47,12 +43,10 @@ public class ScrollController : MonoBehaviour
 
         ScrollStep = 1f / (objectsRects.Count - 1);
 
-        
-
     }
 
-    public void UpdateScroll() {
-
+    public void UpdateScroll()
+    {
 
         ResetScroll();
 
@@ -70,18 +64,18 @@ public class ScrollController : MonoBehaviour
             }
         }
 
-
         Debug.Log("Updated!");
     }
 
-    IEnumerator Increase() {
-
+    IEnumerator Increase()
+    {
         float elapsedTime = 0;
         float waitTime = 0.35f;
         float scrollVal = scrollbar.value;
         float IncreasedScrollVal = scrollVal + ScrollStep;
 
-        while (elapsedTime < waitTime) {
+        while (elapsedTime < waitTime)
+        {
             scrollbar.value = Mathf.Lerp(scrollVal, IncreasedScrollVal, (elapsedTime / waitTime));
 
             elapsedTime += Time.deltaTime;
@@ -96,7 +90,6 @@ public class ScrollController : MonoBehaviour
 
     IEnumerator Decrease()
     {
-
         float elapsedTime = 0;
         float waitTime = 0.35f;
         float scrollVal = scrollbar.value;
@@ -116,24 +109,21 @@ public class ScrollController : MonoBehaviour
         yield return null;
     }
 
-    public void ShowNext() {
-
-       
-
+    public void ShowNext()
+    {
         if (scrollbar.value >= 0.999f || isSliding)
             return;
 
-        StartCoroutine(Increase());     
-
+        StartCoroutine(Increase());
     }
 
-    public void ShowPrev() {
+    public void ShowPrev()
+    {
         if (scrollbar.value <= 0 || isSliding)
             return;
 
         StartCoroutine(Decrease());
-
     }
 
-    
+
 }
